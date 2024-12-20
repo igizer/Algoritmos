@@ -1,0 +1,19 @@
+En una Empresa Farmacéutica se posee un archivo MAE_REMEDIOS (ordenado por Clave: Farmacia + Medicamento), el que se actualiza semanalmente, a traves de la información que se encuentra cargada en un archivo de MOVIMIENTOS (ordenado por Clavem: Farmacia + Medicamento, y Cod_Mov), de la siguiente forma:
+
+Si Clave (MAE_REMEDIOS) es menor que Clavem (MOVIMIENTOS), simplemente se transfieren los datos del Maestro a la salida y se graban.
+
+Si Clave (MAE_REMEDIOS) es igual a Clavem (MOVIMIENTOS) y el Codmov es 1, se considera error y se lista un mensaje indicando el tipo de error; pero si el Codmov es 2, entonces es un remedio que deja de fabricarse y se transfiere el registro al archivo de Remedios vencidos (REM_VENC) ; pero si el Cod_Mov es 3, se modifica la cantidad actual con la cantidad recibida.
+
+Si Clave (MAE_REMEDIOS) es mayor que Clavem (MOVIMIENTOS) y el Codmov es 1, se incorpora el remedio a nuestro Vademecum, considerando que la cantidad recibida configura la cantidad actual y la Fecha_Vencimiento es 30 días posterior a la fecha actual; pero si el Codmov es 2 o 3 se considera error y se deben producir los correspondientes mensajes de error.
+
+Se considera que solo existe un registro de movimiento para cada registro del maestro.
+
+MAE_REMEDIOS Ordenado por Farmacia y Medicamento
+
+FarmaciaMedicamentoCant_ActualFecha_Vencimiento
+MOVIMIENTOS Ordenado por Farmacia, Medicamento y Cod_Mov
+
+FarmaciaMedicamentoCod_MovCant_Recibida
+REM_VENC Ordenado por Medicamento
+
+MedicamentoCant_Vencida
