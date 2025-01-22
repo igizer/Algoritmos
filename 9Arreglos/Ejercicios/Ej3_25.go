@@ -9,6 +9,92 @@ COMPRAS
 Nro_Factura | Proveedor (A,B,C) | Fecha dd/mm/aaaa | Nro_Planta 1..4 | Importe
 
 
+ACCION Ejercicio_3_25 ES
+
+    AMBIENTE
+
+        Formato_Fecha= REGISTRO
+            dia: 1..31
+            mes: 1..12
+            año: N(4)
+        FINREGISTRO
+
+        Formato_Compras = REGISTRO
+            Nro_Factura: N(8)
+            Proveedor: ("A", "B", "C")
+            Fecha: Formato_Fecha
+            Nro_Planta: 1..4
+            Importe: N(8)
+        FINREGISTRO
+
+        regcom: Formato_Compras
+        archcom: Archivo de Formato_Compras
+
+        A: Arreglo [1..4,1..13,1..4] de reales
+
+        i, j, k: entero
+
+    PROCESO
+
+        ABRIR E/(archcom); LEER(archcom, regcom)
+
+        PARA i:=1 HASTA 4 HACER
+            PARA j:=1 HASTA 13 HACER
+                PARA k:= 1 HASTA 4 HACER
+                    A[i,j,k]:= 0
+                FINPARA
+            FINPARA
+        FINPARA
+
+        MIENTRAS NFDA(archcom) HACER
+
+            j: regcom.Fecha.mes
+            k: regcom.Nro_Planta
+
+            SEGUN regcom.Proveedor HACER
+                = "A": i:=1
+                = "B": i:=2
+                = "C": i:=3
+            FINSEGUN
+
+            A[i,j,k]:= A[i,j,k] + regcom.Importe //importe del proveedor por un mes
+            A[i,13,k]:= A[i,13,k] + regcom.Importe //el importe anterior ahora sumado al total por año
+            A[4,j,k]:= A[4,j,k] + regcom.Importe //lo anterior pero ahora sumado a su mes
+            A[4,13,k]:= A[4,13,k] + regcom.Importe //total de los dos primeros
+
+            LEER(archcom, regcom)
+            
+        FINMIENTRAS
+
+        PARA k:= 1 HASTA 4 HACER
+
+            PARA i:= 1 HASTA 3 HACER
+                ESC("Para la planta",k ,"el total por el proveedor ",i, "es de", FABRICA[i,13,k])    //muestra los totales por proveedor de la planta
+            FP
+
+            PARA J:= 1 HASTA 12 HACER
+                ESC("Para la planta",k ,"el total por el mes ",j, "es de", FABRICA[4,j,k])          //muestra los totales por mes de la planta
+            FP
+
+            ESC("El total por año de la planta",k,"es:" FABRICA[4,13,k])        //muestra el total final por año de la planta
+            
+        FINPARA
+
+FINACCION
+
+
+
+            
+
+
+
+
+
+
+
+
+
+
 
 ACCION Ej_3_25 ES
 

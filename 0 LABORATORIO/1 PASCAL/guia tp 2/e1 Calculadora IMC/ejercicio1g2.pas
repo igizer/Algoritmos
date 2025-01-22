@@ -10,6 +10,45 @@
 //- Para menores de 20 años el IMC es: menos de 14 es bajo peso, entre entre 14 y 19 es
 //normal, entre 20 y 24 es sobrepeso y más de 25 es obeso.
 
+program IMC;
+var
+    edad, imc, peso, altura: integer
+procedure CalcularIMC();
+begin
+    imc:= peso / (altura*altura);
+    if edad>=20 then //Mayor de 20
+    begin
+        case imc of
+            0..18: Writeln('Su imc (', imc, ') es peso bajo');
+            19..24: Writeln('Su imc (', imc, ') es peso normal');
+            25..29: Writeln('Su imc (', imc, ') es sobrepeso');
+        else
+            Writeln('Su imc (', imc, ') es peso obeso')
+        end;
+    end
+    else //Menor de 20 ERROR LINEA 29
+    begin
+        case imc of
+            0..14: Writeln('Su imc (', imc, ') es peso bajo');
+            14..19: Writeln('Su imc (', imc, ') es peso normal');
+            20..24: Writeln('Su imc (', imc, ') es sobrepeso');
+        else
+            Writeln('Su imc (', imc, ') es peso obeso')
+        end;
+    end;
+end;
+
+begin
+    Writeln('Escriba su edad');
+    Readln(edad);
+    Writeln('Escriba su peso');
+    Readln(peso);
+    Writeln('Escriba su altura');
+    Readln(altura);
+    CalcularIMC();
+end.
+
+
 
 
 
