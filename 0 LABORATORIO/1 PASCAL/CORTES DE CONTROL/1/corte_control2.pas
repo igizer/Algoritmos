@@ -27,7 +27,7 @@ begin
  resg_planta:= reg.PLANTA;
 end;
 Begin
- Assign (arch, 'C:\Users\xpoke\Downloads\Actividades en clase\0 LABORATORIO\1 PASCAL\CORTES DE CONTROL\1\empleados.dat');
+ Assign (arch, 'C:\Codigo\Algoritmos\0 LABORATORIO\1 PASCAL\CORTES DE CONTROL\1\empleados.dat');
 {$I-}
 Reset (arch);
 error:= IOResult;
