@@ -32,10 +32,10 @@ begin
 end;
 BEGIN
 
-    Assign (sal, 'C:\Users\xpoke\Downloads\Actividades en clase\0 LABORATORIO\1 PASCAL\guia tp3\ej5funcion\salidaej5.txt');
+    Assign (sal, 'C:\Codigo\Algoritmos\0 LABORATORIO\1 PASCAL\guia tp3\ej5funcion\salidaej5.txt');
     rewrite(sal);
 
-    Assign (sec, 'C:\Users\xpoke\Downloads\Actividades en clase\0 LABORATORIO\1 PASCAL\guia tp3\ej5funcion\entradaej5.txt');
+    Assign (sec, 'C:\Codigo\Algoritmos\0 LABORATORIO\1 PASCAL\guia tp3\ej5funcion\entradaej5.txt');
  
     {$I-}
     Reset(sec);

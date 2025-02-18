@@ -1,83 +1,90 @@
-program corregidocgpt;
+//Primer repaso 00:39:01 corrigiendo total 00:53:26
+//EJERCICIO 8
+//8) Se tiene un archivo con los empleados de una empresa que posee los siguientes
+//campos: Planta, Categoría y Nombre del empleado.
+//La categoría es un número entero que va del 1 al 4.
+//Se pide mostrar el nombre de cada trabajador, y además la cantidad de trabajadores que
+//hay por categoría, planta y total general.
+//Para poder trabajar con este ejercicio se tiene que correr el siguiente programa que genera
+//un archivo trabajadores.dat, con los datos necesarios para ejecutar el programa.
+
+program repasogpt.pas;
+
 type
-  EMPLEADOS = RECORD
-    PLANTA: STRING[50];
-    CATEGORIA: 1..4;
-    NOMBRE: STRING[50];
-  END;
+    empleados = record
+    Planta: string[50];
+    Categoria: 1..4;
+    Nombre: string [30];
+    end;
 
 var
-  arch: file of empleados;
-  reg: empleados;
-  error, cat_emple, planta_emple, total_emple: integer;
-  resg_planta: STRING[50];
-  resg_cat: 1..4;
+    arch: file of empleados;
+    reg: empleados;
+    error: integer;
+    cont_cat, cont_planta, cont_tot: integer;
+    resg_cat: 1..4;
+    resg_planta: string [50];
 
 procedure corte_categoria();
-begin
-  writeln('Cantidad de empleados en categoría ', resg_cat, ': ', cat_emple);
-  planta_emple := planta_emple + cat_emple;
-  cat_emple := 0;
-  resg_cat := reg.CATEGORIA;
-end;
+    begin
+        Writeln('La cantidad de empleados que hay en la categoría ', ord(resg_cat), ' es de ', cont_cat); // esto me olvidaba
+        //el ord(resguardo) sive porque 1..4 es un subrango, tengo que hacerlo enrealidad un entero de esta forma
+        //porque SINO NO PUEDO IMPRIMIRLO EN PANTALLA
+        cont_planta:= cont_planta + cont_cat;
+        cont_cat:= 0;
+        resg_cat:= reg.Categoria
+    end;
 
 procedure corte_planta();
+    begin
+        corte_categoria;//corrigiendo agregué esto, me suelo olvidar, OJO A NO OLVIDARME ESTO
+        Writeln('La cantidad de empleados que hay en la planta ', resg_planta, ' es de ', cont_planta);
+        cont_tot:= cont_tot + cont_planta;
+        cont_planta:= 0;
+        resg_planta:= reg.Planta
+    end;
+
 begin
-  writeln('Cantidad de empleados en planta ', resg_planta, ': ', planta_emple);
-  total_emple := total_emple + planta_emple;
-  planta_emple := 0;
-  resg_planta := reg.PLANTA;
+
+Assign(arch, 'C:\Codigo\Algoritmos\0 LABORATORIO\1 PASCAL\CORTES DE CONTROL\1\empleados.dat');
+
+{$I-}
+Reset(arch);
+error:= IOResult;
+{$I+}
+if error <> 0 then
+begin
+    Writeln('Error: el archivo empleados.dat exite?');
+    halt(2);
 end;
 
+read(arch, reg);
+cont_cat:= 0;
+cont_planta:= 0;
+cont_tot:= 0;
+resg_cat:= reg.Categoria;
+resg_planta:= reg.Planta;
+
+While not EOF(arch) do
 begin
-  Assign(arch, 'C:\Codigo\Algoritmos\0 LABORATORIO\1 PASCAL\CORTES DE CONTROL\1\empleados.dat');
-  {$I-}
-  Reset(arch);
-  error := IOResult;
-  {$I+}
-  if error <> 0 then
-  begin
-    writeln('Error: el archivo empleados.dat existe?');
-    halt(2);
-  end;
 
-  if EOF(arch) then
-  begin
-    writeln('El archivo está vacío.');
-    Close(arch);
-    Halt(0);
-  end;
+    If resg_planta <> reg.Planta then //no hace falta en este if ni en el else los begin end, porque solo manejan 1 linea
+        corte_planta
+    else If resg_cat <> reg.Categoria then
+        corte_categoria;
 
-  read(arch, reg);
-  cat_emple := 0;
-  planta_emple := 0;
-  total_emple := 0;
-  resg_planta := reg.PLANTA;
-  resg_cat := reg.CATEGORIA;
-
-  while not EOF(arch) do
-  begin
-    writeln('Nombre del empleado: ', reg.NOMBRE);
-    cat_emple := cat_emple + 1;
+    Writeln(reg.Nombre);
+    cont_cat:= cont_cat + 1;
 
     read(arch, reg);
 
-    if resg_planta <> reg.PLANTA then
-    begin
-      corte_categoria();
-      corte_planta();
-    end
-    else if resg_cat <> reg.CATEGORIA then
-    begin
-      corte_categoria();
-    end;
-  end;
+end;
 
-  // Últimos cortes para el último grupo
-  corte_categoria();
-  corte_planta();
-  
-  writeln('Total de empleados: ', total_emple);
-  Close(arch);
-  Readln;
+corte_planta;
+
+Writeln('El total general de empleados es de ', cont_tot);
+Close(arch);
+ReadLn;//se usa para esperar una entrada y poder leer el resultado
+
 end.
+
