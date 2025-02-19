@@ -8,7 +8,8 @@
 //b) Contar la cantidad de mensajes que se dirigen hacia el área de sistemas (que
 //destino comience con 23).
 program ej5guia3;
-uses math; // Para poder usar el "Power(numero_a_elevar, exponente)"" que es la potencia
+//uses math;
+// Para poder usar el "Power(numero_a_elevar, exponente)"" que es la potencia
 var 
  sec, sal: file of char;
  v : char;
