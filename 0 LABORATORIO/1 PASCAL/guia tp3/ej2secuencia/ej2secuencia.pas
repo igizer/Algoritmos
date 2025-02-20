@@ -16,7 +16,7 @@ var
     palabras, error, oracion: integer;
 
 BEGIN
-    Assign(sec, 'C:\Users\xpoke\Downloads\Actividades en clase\0 LABORATORIO\1 PASCAL\guia tp3\ej2secuencia\archivo.txt');
+    Assign(sec, 'C:\Codigo\Algoritmos\0 LABORATORIO\1 PASCAL\guia tp3\ej2secuencia\archivo.txt');
 
     {$I-}
     Reset(sec);
