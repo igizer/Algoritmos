@@ -23,8 +23,103 @@ MedicamentoCant_Vencida
 
 ACCION MAE_REMEDIOS ES
 	AMBIENTE
-		reg= registro
-			
+		fecha = registro
+			dia: 1..31
+			mes: 1..12
+			año: 1..31
+		fr
+
+		formato_mae = registro
+			clave = registro
+				farmacia: N(5)
+				medicamento: n(5)
+			fr
+			cant_actual: n(4)
+			fecha_vencimiento: fecha
+		fr
+
+		formato_mov = registro
+			clavem = registro
+				farmacia: N(5)
+				medicamento: n(5)
+			fr
+			cod_mov: 1..3
+			cant_recibida: n(4)
+		fr
+
+		formato_vencidos = registro
+			medicamento: n(5)
+			cant_vencida: n(4)
+		fr
+
+		rmae, rsal: formato_mae
+		archmae, archsal: archivo de rmae ordenado por clave
+		rmov: formato_mov
+		archmov: archivo de rmov ordenado por clavem y cod_mov
+		rvenc: formato_venc
+		archvenc: archivo de rvenc ordenado por medicamento
+
+		procedimiento leermae es
+			leer(archmae, rmae)
+			si fda(archmae) entonces
+				rmae.clave:= hv
+			fs
+		fp
+
+		procedimiento leermov es
+			leer(archmov, rmov)
+			si fda(archmov) entonces
+				rmov.clavem:= hv
+			fs
+		fp
+
+	PROCESO
+
+		ABRIR E/(archmae); LEER(archmae, rmae)
+		ABRIR E/(archmov); LEER(archmov, rmov)
+		ABRIR /S(archsal)
+
+		MIENTRAS (rmae.clave <> hv) v (rmov.clave <> hv) HACER
+			SI rmae.clave < rmov.clavem ENTONCES
+				GRABAR(archsal, rmae)
+				leermae
+			SINO
+				si rmae.clave = rmov.clavem entonces
+					segun rmov.cod_mov HACER
+						1: //notificar error, no pasa nd
+							esc("ERROR; CODIGO 1")
+						2: // se lo da como vencido
+							rvenc.medicamento:= rmae.medicamento
+							rvenc.cant_vencida:= rmae.cant_actual
+							grabar(archvenc, rvenc)
+						3:
+							rsal.clave:= rmae.Clavem
+							rsal.fecha_vencimiento:= rmae.fecha_vencimiento
+							rsal.cant_actual:= rmov.cant_recibida
+							grabar(archsal, rsal)
+					fs
+					leermae; leermov
+				sino
+					si rmae.clave > rmov.clavem entonces
+						si rmov.cod_mov=1 entonces
+							rsal.clave:= rmov.clavem
+							rsal.cant_actual:= rmov.cant_recibida
+							rsal.fecha_vencimiento:= fecha_actual() + 30
+						sino
+							esc("ERROR; CODIGO ", rmov.cod_mov)
+						fs
+						leermov
+					fs
+				fs
+			FS			
+		FM
+
+		cerrar(archmae); cerrar(archsal); cerrar(archmov); cerrar(archvenc);
+	
+
+
+
+
 
 
 
@@ -50,7 +145,7 @@ ACCION Ejercicio_2_2_19 ES
 			Fecha_Vencimiento: Fecha
 		FINREGISTRO
 
-		Formato_mov= REGISTRI
+		Formato_mov= REGISTRO
 			Clavem= REGISTRO
 				Farmacia: N(5)
 				Medicamento: N(5)
