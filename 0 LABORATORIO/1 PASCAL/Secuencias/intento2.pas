@@ -38,6 +38,7 @@ BEGIN
             until v=' ';
             palabras:= palabras + 1;
         end;
+        if not eof(sec) then
         read(sec, v);
     end;
 

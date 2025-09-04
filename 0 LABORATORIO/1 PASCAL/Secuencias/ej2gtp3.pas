@@ -1,50 +1,55 @@
+//2) Contar todas las palabras de una secuencia
+//Para poder ejecutar este código es necesario crear un archivo (con nombre: archivo.txt) en
+//el mismo lugar donde se encuentra el código del programa.
+//Colocar en el archivo el siguiente texto:
+//Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu eros odio. Nunc venenatis
+//nibh et dolor commodo, eu dictum libero malesuada. Nullam ac urna nisl. Quisque condimentum
+//augue sagittis.
+//Código:
+
 program ej2gtp3;
 
 const
-    signos = [' ', ',', '.', '?', '¿', '¡', '!'];  // Caracteres que separan palabras
+signos = [' ', ',', '.', '?', '¿', '¡', '!'];
 
 var
-    sec: Text;
-    v: char;
-    error, palabras: integer;
-    dentroPalabra: boolean;
+sec: text;
+v: char;
+error, palabras: integer;
 
 begin
-    Assign(sec, 'C:\Codigo\Algoritmos\0 LABORATORIO\1 PASCAL\Secuencias\archivo.txt');
 
-    {$I-}
-    Reset(sec);
-    error := IOResult;
-    {$I+}
+Assign(sec, 'C:\Codigo\Algoritmos\0 LABORATORIO\1 PASCAL\Secuencias\archivo.txt');
 
-    if error <> 0 then
+{$I-}
+Reset(sec);
+error:= IOResult;
+{$I+}
+
+if error <> 0 then
     begin
-        writeln('Error: ¿el archivo archivo.txt existe?');
-        halt(2);
+    writeln('Error: el archivo archivo.txt exite?');
+    halt(2);
     end;
 
-    palabras := 0;
-    dentroPalabra := false;
+palabras:=0;
 
-    // Mientras no sea el fin de archivo
-    while not EOF(sec) do
+while not EOF(sec) do
     begin
-        Read(sec, v);  // Leer un carácter
 
-        // Si el carácter no es un separador (es parte de una palabra)
-        if not (v in signos) then
-        begin
-            // Si no estábamos dentro de una palabra, aumentamos el contador
-            if not dentroPalabra then
-            begin
-                palabras := palabras + 1;
-                dentroPalabra := true;
-            end;
-        end
-        else
-            dentroPalabra := false;  // Encontramos un separador, salimos de la palabra
+        repeat
+            read(sec,v)
+        until not (v in signos);
+
+        repeat
+            read(sec,v)
+        until (v in signos) or EOF(sec);
+
+        palabras:= palabras+1;
+        
     end;
 
-    writeln('La cantidad de palabras es: ', palabras);
-    Close(sec);
+    writeln('La cantidad de palabras son: ', palabras);
+    close(sec);
+
 end.
